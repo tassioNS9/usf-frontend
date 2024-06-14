@@ -1,13 +1,7 @@
 
-<script setup lang="ts">
-import Sidebar from './Sidebar.vue'
-import Footer from './Footer.vue';
-import Header from './Header.vue'
-</script>
-
 <template>
   <div class="flex h-screen bg-gray-200 font-roboto">
-    <Sidebar />
+    <SideBar />
 
     <div class="flex-1 flex flex-col overflow-hidden">
       <Header />
@@ -21,3 +15,9 @@ import Header from './Header.vue'
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import SideBar from './SideBar.vue'
+import Footer from './Footer.vue';
+import Header from './Header.vue'
+</script>
