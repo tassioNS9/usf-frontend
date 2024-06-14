@@ -59,7 +59,7 @@
 
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { brazilStates } from '@/utils/statesDate'
 import useVuelidate from "@vuelidate/core";
 import Swal from 'sweetalert2';

@@ -94,7 +94,7 @@
   </header>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useSidebar } from '../composables/useSidebar'
 import { useAuth } from '@/stores/auth';

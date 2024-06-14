@@ -61,7 +61,7 @@
 
 
 
-<script setup>
+<script setup lang="ts">
 import CardComponent from '@/components/CardComponent.vue'
 import ModalCardComponent from '@/components/CardComponent.vue'
 import Title from "@/components/Title"

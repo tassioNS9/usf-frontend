@@ -42,7 +42,7 @@
 </template>
 
 
-<script setup>
+<script setup lang="ts">
 import CreateChart from '@/components/CreateChart.vue';
 import { ref, onMounted, watch } from 'vue'
 import { useAuth } from "@/stores/auth";
