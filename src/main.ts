@@ -12,10 +12,4 @@ const app = createApp(App)
 app.use(pinia).use(router).use(VueApexCharts)
 app.use(VueSweetalert2)
 
-//import DashboardLayout from './components/DashboardLayout.vue'
-//import EmptyLayout from './components/EmptyLayout.vue'
-
-// app.component('DefaultLayout', DashboardLayout)
-// app.component('EmptyLayout', EmptyLayout)
-
 app.mount('#app')
