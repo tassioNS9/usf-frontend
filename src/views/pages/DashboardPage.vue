@@ -52,11 +52,9 @@ import Container from '@/components/Container.vue'
 import Loading from '@/components/Loading.vue';
 import useUnitsList from '@/composables/useUnitsList';
 import DefaultLayout from '@/components/DefaultLayout.vue';
+import {type Indicator} from '@/types/indicators'
 
-
-
-const load = ref < Boolean > (false)
-const dataIndicators = ref([])
+const dataIndicators = ref<Indicator[]>([])
 const auth = useAuth();
 const yearSelected = ref(2024)
 const unitSelected = ref(auth.userAuthetincated.id_unit)
@@ -83,9 +81,6 @@ const getFilteredEvaluations = async () => {
   })
 }
 
-
-
-
 const {dataUnits,isload} = useUnitsList()
 
 onMounted(() => {
@@ -93,7 +88,5 @@ onMounted(() => {
 })
 
 </script>
-
-
 
 <style scoped></style>

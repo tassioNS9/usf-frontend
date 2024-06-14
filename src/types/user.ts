@@ -46,6 +46,7 @@ export enum TypeIndicators {
 export interface Indicator {
     id?: number;
     description: string;
+    evaluations?:Evaluation
     objective: number;
     dimension: string;
     type_Indicator: string
