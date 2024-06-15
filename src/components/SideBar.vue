@@ -13,7 +13,7 @@
                 <div class="flex items-center">
                     <img class="w-8 h-8 mr-2" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg" alt="logo">
 
-                    <span class="mx-2 text-2xl font-semibold text-white">UFS Sistemas</span>
+                    <span class="mx-2 text-2xl font-semibold text-white">USF Sistemas</span>
                 </div>
             </div>
 

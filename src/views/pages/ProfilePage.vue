@@ -52,13 +52,12 @@
                                 </div>
 
                             </div>
-                            <div class="flex items-center space-x-4 mt-4">
-                                <button type="submit"
-                                    class="text-white bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                                    Atualizar
-                                </button>
-
-                            </div>
+                            <div class="flex items-center space-x-4 mt-1">
+                            <button type="submit"
+                                class=" w-full lg:w-1/4 bg-indigo-700 items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200 hover:bg-indigo-800">
+                                Atualizar
+                            </button>
+                        </div>
                         </form>
                     </div>
                 </section>

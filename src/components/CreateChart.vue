@@ -134,10 +134,7 @@ watch(() => props.evaluations, async (newQuestion, oldQuestion) => {
 
 const getMonthofDate = (date: Date) => {
   let newDate = new Date(date)
-  if(newDate.getMonth() + 1 === 12){
-    return 0
-  }
-  return newDate.getMonth() + 1
+  return newDate.getMonth()
 }
 
 

@@ -167,11 +167,11 @@
 
       <div class="flex items-center space-x-4">
         <button type="submit"
-          class=" bg-indigo-700 hover:bg-indigo-800 text-white focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">
+          class=" w-1/2 bg-indigo-700 hover:bg-indigo-800 text-white focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">
           Atualizar
         </button>
-        <button type="button" @click="cancelEdit()"
-          class="text-red-600 inline-flex items-center hover:text-white border border-red-600 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+        <button type="button" @click="closeModal"
+          class=" w-1/2 text-red-600 items-center hover:text-white border border-red-600 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
           Cancelar
         </button>
       </div>
@@ -194,8 +194,7 @@ import { required, minLength, email } from "@vuelidate/validators";
 import useVuelidate from "@vuelidate/core";
 import DefaultLayout from '@/components/DefaultLayout.vue';
 import Swal from 'sweetalert2';
-import fakeData from '@/database/usersFake.json'
-import cancelEdit from "@/composables/cancelModal";
+import closeModal from "@/composables/cancelModal";
 enum Role {
   USER = 'USER',
   ADMIN = 'ADMIN'
@@ -303,11 +302,5 @@ const updateUser = async () => {
 
 const { dataUsers, isload } = useUsersList()
 const { dataUnits } = useUnitsList()
-
-
-// watch(page, async (newQuestion, oldQuestion) => {
-//   getUsers();
-// })
-
 
 </script>

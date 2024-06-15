@@ -144,15 +144,15 @@
 
 
             <div class="flex items-center space-x-4">
-                <button type="submit"
-                    class=" bg-indigo-700 hover:bg-indigo-800 text-white focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">
-                    Atualizar
-                </button>
-                <button type="button" @click="cancelEdit()"
-                    class="text-red-600 inline-flex items-center hover:text-white border border-red-600 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
-                    Cancelar
-                </button>
-            </div>
+                    <button type="submit"
+                        class=" w-1/2 bg-indigo-700 hover:bg-indigo-800 text-white focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">
+                        Atualizar
+                    </button>
+                    <button type="button" @click="closeModal"
+                        class=" w-1/2 text-red-600 items-center hover:text-white border border-red-600 hover:bg-red-600 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                        Cancelar
+                    </button>
+                </div>
         </form>
     </ModalCardComponent>
 </DefaultLayout>
@@ -174,7 +174,7 @@ import Title from '@/components/Title.vue'
 import useIndicatorsList from '@/composables/useIndicatorsList';
 import useModalToggle from '@/composables/useModalToggle'
 import DefaultLayout from '@/components/DefaultLayout.vue';
-import cancelEdit from "@/composables/cancelModal";
+import closeModal from "@/composables/cancelModal";
 const editIndicator = ref<Indicator>({
     id: 0,
     description: '',
