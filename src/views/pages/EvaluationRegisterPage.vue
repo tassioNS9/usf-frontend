@@ -230,9 +230,9 @@ const v$ = useVuelidate(rules, dataEvaluation)
 
 
 const createEvaluation = async () => {
-    console.log('first', dataEvaluation.value.date_evaluation)
+    //console.log('first', dataEvaluation.value.date_evaluation)
     dataEvaluation.value.date_evaluation = new Date(dataEvaluation.value.date_evaluation + '-20')
-    console.log(dataEvaluation.value.date_evaluation)
+    //console.log(dataEvaluation.value.date_evaluation)
 
 
     const result = await v$.value.$validate()

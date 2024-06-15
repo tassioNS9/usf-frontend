@@ -7,10 +7,10 @@
  */
 
 import axios from 'axios';
-
-
+//http://localhost:3333
+//
 const axiosInstance = axios.create({
-  baseURL:  'https://usf-backend.vercel.app',
+  baseURL:  'https://usf-backend.vercel.app/',
   headers: {
     'Content-type': 'application/json'
   }

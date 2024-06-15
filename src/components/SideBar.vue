@@ -114,12 +114,9 @@
                     </svg>
 
                     <span class="mx-4">Cadastar Unidade</span>
-                </router-link>
-               
+                </router-link>              
             </div>
           
-           
-
                 <router-link class="flex items-center px-6 py-2 mt-4 duration-200 border-l-4"
                     :class="[$route.name === 'Avaliacoes' ? activeClass : inactiveClass]" to="/app/avaliacoes">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
@@ -152,7 +149,6 @@
                   </svg>
                   <span @click="logout()" class=" text-gray-500 duration-200 mx-4 cursor-pointer">Sair</span> 
                </a>
-         
             </nav>
         </div>
     </div>
@@ -165,8 +161,6 @@ import { useSidebar } from '../composables/useSidebar'
  import { useAuth } from "@/stores/auth";
 
  const auth = useAuth();
-
-
  const logout =  () => {
     auth.clear()
  }
