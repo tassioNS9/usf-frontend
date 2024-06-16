@@ -53,7 +53,7 @@
 
 import api from '@/services/api';
 import { reactive, ref } from 'vue';
-import { useAuth } from '@/stores/auth.js';
+import { useAuth } from '@/stores/auth';
 import { useRouter } from "vue-router";
 const auth = useAuth();
 const router = useRouter()
@@ -68,11 +68,11 @@ async function login() {
   await api.post('/api/auth', user, {
     headers: { 'Content-Type': 'application/json' },
   }).then(response => {
+    console.log(response)
     errorLogin.value = false
     auth.setToken(response.data.user.token);
     auth.setUser(response.data.user);
-    auth.setIsAuth(true);
-    router.push('/app/dashboard')
+    router.push({path:'/app/dashboard'})
     window.location.href = '/app/dashboard'
   }).catch(err => {
     errorLogin.value = true

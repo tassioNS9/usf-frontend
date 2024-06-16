@@ -10,7 +10,7 @@ const MainRoutes = {
   meta: {
     requiresAuth: true
   },
-  redirect: '/app',
+  redirect: '/app/dashboard',
   children: [
       {
           name: 'Dashboard',
@@ -27,6 +27,11 @@ const routes: RouteRecordRaw[] = [
     name: 'Login',
     component: Login,
    // meta: { layout: 'empty' },
+  },
+  {
+    name: 'Dashboard',
+    path: '/app/dashboard',
+    component: () => import('@/views/pages/DashboardPage.vue'),
   },
 
   {

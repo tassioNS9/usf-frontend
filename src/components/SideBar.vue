@@ -31,7 +31,7 @@
                     <span class="mx-4">Dashboard</span>
                 </router-link>
         
-                <div v-if="auth.role === 'ADMIN'">       
+                <div :class="auth.role === 'ADMIN' ? 'block' : 'hidden'">       
                 <router-link class="flex items-center px-6 py-2 mt-4 duration-200 border-l-4"
                     :class="[$route.name === 'ListaUsuarios' ? activeClass : inactiveClass]" to="/app/lista-usuarios">
                     <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">

@@ -21,6 +21,11 @@ export const useAuth = defineStore('auth', () => {
     user.value = userValue;
   }
 
+  function setRole(roleValue : string){
+    localStorage.setItem('ROLE', roleValue);
+    role.value = roleValue
+  }
+
 
   function setIsAuth(auth : boolean) {
     isAuth.value = auth;
@@ -29,8 +34,7 @@ export const useAuth = defineStore('auth', () => {
   const isAuthenticated = computed(() => {
       return token.value && user.value;
   })
-
-
+  
   const fullName = computed(() => {
     if (userAuthetincated.value) {
       return userAuthetincated.value.name;
@@ -47,8 +51,9 @@ export const useAuth = defineStore('auth', () => {
           Authorization: tokenAuth,
         },
       });
-      localStorage.setItem('ROLE', data.user.role);
       userAuthetincated.value = data.user
+      setIsAuth(true)
+      setRole(data.user.role);
       return data.user;
     } catch (error) {
       clear();
