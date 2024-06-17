@@ -7,8 +7,6 @@
  */
 
 import axios from 'axios';
-//http://localhost:3333
-//
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
   headers: {
