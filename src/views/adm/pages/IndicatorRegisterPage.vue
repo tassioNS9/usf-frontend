@@ -92,7 +92,8 @@ import { required, minLength, maxLength } from '@vuelidate/validators'
 import axiosInstance from '@/services/api';
 import Swal from 'sweetalert2';
 import { useVuelidate } from '@vuelidate/core'
-import { type Indicator } from "@/types/user";
+import { helpers } from "@vuelidate/validators";
+import { type Indicator } from "@/types/indicators";
 import CardComponent from '@/components/CardComponent.vue'
 import DefaultLayout from "@/components/DefaultLayout.vue";
 
@@ -111,8 +112,9 @@ const dataIndicator = ref<Indicator>({
 })
 
 const rules = computed(() => {
+
     return {
-        description: { required }, // Matches state.firstName
+        description: { required,}, // Matches state.firstName
         objective: { required }, // Matches state.lastName
         dimension: { required },
         type_Indicator: { required },

@@ -117,7 +117,7 @@
                 </router-link>              
             </div>
           
-                <router-link class="flex items-center px-6 py-2 mt-4 duration-200 border-l-4"
+                <router-link v-if="auth.role === 'USER'" class="flex items-center px-6 py-2 mt-4 duration-200 border-l-4"
                     :class="[$route.name === 'Avaliacoes' ? activeClass : inactiveClass]" to="/app/avaliacoes">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 20 20" fill="currentColor">
                         <path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" />

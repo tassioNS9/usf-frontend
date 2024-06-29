@@ -14,14 +14,14 @@
                                 <input type="text" v-model="data.name" name="name" id="name" autocomplete="given-name"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
                                 <p class="px-2 mt-2 text-xs text-red-600" v-if="v$.name.$error">
-                                    {{ "Campo obrigatório!" }}</p>
+                                    {{ "Campo Inválido ou nulo!" }}</p>
                             </div>
                             <div class="w-full">
                                 <label for="cpf" class="block mb-2 text-sm font-medium text-gray-900">*CPF</label>
                                 <input type="text" name="cpf" id="cpf" v-model="data.cpf"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
                                 <p class="px-2 mt-2 text-xs text-red-600" v-if="v$.cpf.$error">
-                                    {{ "Campo obrigatório!" }}</p>
+                                    {{ "Campo Inválido ou nulo!" }}</p>
                             </div>
                             <div class="w-full">
                                 <label for="office"
@@ -30,22 +30,9 @@
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
 
                             </div>
-                            <div class="w-full">
-                                <label for="unit" class="block mb-2 text-sm font-medium text-gray-900">*Unidade
-                                    de
-                                    Saúde</label>
-                                <select id="unit" name="unit" autocomplete="unit-name" placeholder="escolha a unidade"
-                                    v-model="data.id_unit"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5">
-                                    <option v-for="(unit, index) in dataUnits" :value="unit.id" :key="unit.id">
-                                        {{ unit.name }}</option>
 
-                                </select>
-                                <!-- <p class="px-2 mt-2 text-xs text-red-600" v-if="v$.id_unit.$error">
-                                {{ "Campo obrigatório!"}}</p> -->
-                            </div>
 
-                            <div class="w-full">
+                            <div class="sm:col-span-2">
                                 <label for="type_indicator"
                                     class="block text-sm font-medium leading-6 text-gray-900">*Tipo
                                     do Usuário
@@ -68,13 +55,31 @@
                                 </div>
                             </div>
 
+
+                            <div v-if="data.role === 'USER'" class="sm:col-span-2">
+                                <label for="unit" class="block mb-2 text-sm font-medium text-gray-900">*Unidade
+                                    de
+                                    Saúde</label>
+                                <select id="unit" name="unit" autocomplete="unit-name" placeholder="escolha a unidade"
+                                    v-model="data.id_unit"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5">
+                                    <option>Selecione uma unidade</option>
+                                    <option v-for="(unit, index) in dataUnits" :value="unit.id" :key="unit.id">
+                                        {{ unit.name }}</option>
+                                </select>
+                                <p class="px-2 mt-2 text-xs text-red-600" v-if="v$.id_unit?.$error">
+                                {{ "Campo Inválido ou nulo!"}}</p>
+                            </div>
+
+
+
                             <div class="w-full">
                                 <label for="password"
                                     class="block mb-2 text-sm font-medium text-gray-900">*Senha</label>
                                 <input type="password" name="password" id="password" v-model="data.password"
                                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
                                 <p class="px-2 mt-2 text-xs text-red-600" v-if="v$.password.$error">
-                                    {{ "Campo obrigatório!" }}</p>
+                                    {{ "Campo Inválido ou nulo!" }}</p>
                             </div>
 
                             <div class="w-full">
@@ -103,9 +108,10 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, watch, computed } from "vue";
 import { useVuelidate } from '@vuelidate/core'
-import { required, minLength, sameAs, maxLength } from '@vuelidate/validators'
+import { required, minLength, sameAs, maxLength, minValue } from '@vuelidate/validators'
+import { helpers } from "@vuelidate/validators";
 import axiosInstance from '@/services/api';
 import Swal from 'sweetalert2';
 import { type UserRegister } from "@/types/user";
@@ -121,21 +127,42 @@ const data = ref<UserRegister>({
     name: '',
     password: '',
     cpf: '',
-    id_unit: 0,
+    id_unit: null,
     office: '',
     confirmPassword: '',
     role: Role.USER
 })
 
 const rules = computed(() => {
-    return {
-        name: { required, minLength: minLength(3) }, // Matches state.firstName
-        cpf: { required, minLength: minLength(11), maxLength: maxLength(11) }, // Matches state.lastName
-        password: { required, minLength: minLength(8) },
-        id_unit: { required },
-        confirmPassword: {
-            sameAsPassword: sameAs(data.value.password), // can be a reference to a field or computed property
+    const onlyAlphas = helpers.regex(/^[a-zA-Z]*$/)
+    const onlyNumbers = helpers.regex(/^[0-9]*$/)
+    if (data.value.role === Role.USER) {
+           return {
+            name: { required,  onlyAlphas,  minLength: minLength(3) }, // Matches state.firstName
+            cpf: { required, onlyNumbers, minLength: minLength(11), maxLength: maxLength(11) }, // Matches state.lastName
+            password: { required, minLength: minLength(8) },
+            id_unit: { required, minValue:minValue(1) },
+            confirmPassword: {
+                sameAsPassword: sameAs(data.value.password), // can be a reference to a field or computed property
+            }
         }
+    } else {
+        return {
+            name: {required:helpers.regex(/^[a-zA-Z]*$/), onlyAlphas, minLength: minLength(3) }, // Matches state.firstName
+            cpf: { required:helpers.regex(/^[0-9]*$/), onlyNumbers, minLength: minLength(11), maxLength: maxLength(11) }, // Matches state.lastName
+            password: { required, minLength: minLength(8) },
+            confirmPassword: {
+                sameAsPassword: sameAs(data.value.password), // can be a reference to a field or computed property
+            }
+        }
+
+    }
+
+})
+
+watch(data.value, async (newQuestion, oldQuestion) => {
+    if(data.value.role === Role.ADMIN){
+        data.value.id_unit = null
     }
 })
 
@@ -177,7 +204,7 @@ const createUser = async (e: any) => {
         })
     } else {
         Swal.fire({
-            title: 'Erro ao atualizar!',
+            title: 'Erro ao Cadastrar!',
             text: 'Por favor verifique os campos!',
             icon: 'error',
             confirmButtonText: 'Ok',

@@ -53,8 +53,19 @@
                             <td class="px-6 py-4">
                                 {{ unit.state }}
                             </td>
-                            <td @click="openEditModal(unit)" class="px-6 py-4 text-right">
-                                <a href="#" class="font-medium text-blue-600  hover:underline">Editar</a>
+                            <td class="flex gap-1 px-6 py-4 text-right justify-between items-center ">
+                                <p class="font-medium text-blue-600  hover:cursor-pointer hover:underline"
+                                    @click="openEditModal(unit)">
+                                    Editar</p>
+                                <p @click="deleteUnit(unit)">
+                                    <svg class="w-6 h-6 hover:cursor-pointer text-gray-800 dark:text-white"
+                                        aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                        fill="none" viewBox="0 0 24 24">
+                                        <path stroke="red" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M5 7h14m-9 3v8m4-8v8M10 3h4a1 1 0 0 1 1 1v3H9V4a1 1 0 0 1 1-1ZM6 7h12v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V7Z" />
+                                    </svg>
+                                </p>
                             </td>
                         </tr>
 
@@ -109,6 +120,16 @@
                             {{ "Campo obrigatório!" }}
                         </p>
                     </div>
+
+                    <div class="w-full">
+                        <label for="tel" class="block mb-2 text-sm font-medium text-gray-900">Telefone</label>
+                        <input type="text" name="tel" id="tel" v-model="editUnit.tel"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                            placeholder="Telefone">
+                        <p class="px-2 mt-2 text-xs text-red-600" v-if="v$.tel.$error">
+                            {{ "Campo Inválido!" }}
+                        </p>
+                    </div>
                 </div>
                 <div class="flex items-center space-x-4">
                     <button type="submit"
@@ -130,10 +151,11 @@ import axiosInstance from '@/services/api'
 import { brazilStates } from '@/utils/statesDate'
 import { ref, onMounted, reactive, computed } from 'vue'
 import useVuelidate from "@vuelidate/core";
+import { helpers } from '@vuelidate/validators';
 import Swal from 'sweetalert2';
 import { required, minLength, email } from "@vuelidate/validators";
 import { useAuth } from '@/stores/auth';
-import { type Unit } from '@/types/user'
+import { type Unit } from '@/types/unit'
 import Loading from '@/components/Loading.vue'
 import InputSearch from '@/components/InputSearch.vue';
 import CardComponent from '@/components/CardComponent.vue'
@@ -160,11 +182,14 @@ const editUnit = ref<Unit>({
 const searchUnit = ref('')
 const { isOpenModal } = useModalToggle()
 const rules = computed(() => {
+    const onlyAlphas = helpers.regex(/^[a-zA-Z]*$/)
+    const onlyNumbers = helpers.regex(/^[0-9]*$/)
     return {
-        name: { required },
+        name: { required, onlyAlphas },
         address: { required },
-        city: { required },
+        city: { required, onlyAlphas },
         neighborhood: { required },
+        tel:{onlyNumbers},
         state: { required }
     }
 })
@@ -178,7 +203,7 @@ const filteredUnits = computed(() => {
 
 
     if (searchUnit.value !== '') {
-        units = units.filter(item => item.name.includes(searchUnit.value))
+        units = units.filter(item => item.name.toLowerCase().includes(searchUnit.value.toLowerCase()))
     }
     return units;
 })
@@ -208,6 +233,7 @@ const updateUnit = async (e: any) => {
                 icon: "success",
                 confirmButtonText: "Ok",
             });
+
         }).catch(err => {
             Swal.fire({
                 title: 'Erro ao atualizar cadastro!',
@@ -225,6 +251,44 @@ const updateUnit = async (e: any) => {
             confirmButtonText: 'Ok',
         });
     }
+
+}
+
+const deleteUnit = async (data: any) => {
+
+Swal.fire({
+    title: "Você tem certeza?",
+    text: `Você perderá todos os dados relaciondados a esta Unidade`,
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "SIM, Deletar!"
+}).then((result) => {
+    if (result.isConfirmed) {
+        axiosInstance.delete(`/api/units/${data.id}`)
+            .then(response => {
+                Swal.fire({
+                    title: "Deletada!",
+                    text: "Your file has been deleted.",
+                    icon: "success"
+                });
+                dataUnits.value = dataUnits.value.filter(item=> item.id !== data.id)
+            }).catch(error => {
+                Swal.fire({
+                    title: "Eroor!",
+                    text: "Ocorreu um error ao Deletar!.",
+                    icon: "warning"
+                });
+            });
+    } else {
+        Swal.fire({
+            title: "Cancelado!",
+            text: "Seu dado está seguro :)",
+            icon: "error"
+        });
+    }
+});
 
 }
 

@@ -9,7 +9,7 @@
 
 
 <script setup lang="ts">
-import { type Evaluation } from '@/types/user';
+import { type Evaluation } from '@/types/evaluations';
 import { ref, defineProps, onMounted, watch } from 'vue'
 const props = defineProps({
   evaluations: {

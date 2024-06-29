@@ -26,7 +26,7 @@
                                     <input type="text" name="office" id="office" v-model="userData.office"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 ">
                                 </div>
-                                <div class="sm:col-span-2">
+                                <div v-if="userData.unit !== null"class="sm:col-span-2">
                                     <label for="unit" class="block mb-2 text-sm font-medium text-gray-900 ">Unidade
                                         de
                                         Saúde</label>
@@ -67,15 +67,11 @@
 </template>
 
 <script setup lang="ts">
-import axiosInstance from 'axios'
 import { ref, onMounted, reactive, computed } from 'vue'
 import useVuelidate from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import { useAuth } from '@/stores/auth.js';
 import Loading from '@/components/Loading.vue';
-import Sidebar from '@/components/SideBar.vue'
-import Footer from '@/components/Footer.vue';
-import Header from '@/components/Header.vue'
 import CardComponent from '@/components/CardComponent.vue'
 import { type User } from '@/types/user';
 import DefaultLayout from '@/components/DefaultLayout.vue';
@@ -89,6 +85,7 @@ const userData = ref<User>({
     password: '',
     cpf: '',
     office: '',
+    role:auth.userAuthetincated.role
 })
 
 
@@ -96,7 +93,6 @@ const rules = computed(() => {
     return {
         name: { required },
         office: { required },
-
     }
 })
 

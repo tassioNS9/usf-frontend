@@ -13,7 +13,7 @@
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
                             <p class="px-2 mt-2 text-xs text-red-600" v-if="v$.name.$error">
                                 <!-- {{ v$.name.$errors[0].$params.type === 'required' ? "Campo obrigatório!" : "Nome inválido!"}}</p> -->
-                                {{ "Campo obrigatório!" }}
+                                {{ "Campo inválido ou nulo" }}
                             </p>
                         </div>
                         <div class="sm:col-span-2">
@@ -21,14 +21,14 @@
                             <input type="text" name="cpf" id="cpf" v-model="data.address"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
                             <p class="px-2 mt-2 text-xs text-red-600" v-if="v$.address.$error">
-                                {{ "Campo obrigatório!" }}</p>
+                                {{ "Campo inválido ou nulo" }}</p>
                         </div>
                         <div class="w-full">
                             <label for="office" class="block mb-2 text-sm font-medium text-gray-900">*Cidade</label>
                             <input type="text" name="office" id="office" v-model="data.city"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
                             <p class="px-2 mt-2 text-xs text-red-600" v-if="v$.city.$error">
-                                {{ "Campo obrigatório!" }}</p>
+                                {{ "Campo inválido ou nulo" }}</p>
 
                         </div>
 
@@ -43,7 +43,7 @@
                                     {{ state.name }}</option>
                             </select>
                             <p class="px-2 mt-2 text-xs text-red-600" v-if="v$.state.$error">
-                                {{ "Campo obrigatório!" }}</p>
+                                {{ "Campo inválido ou nulo" }}</p>
                         </div>
 
                         <div class="w-full">
@@ -58,7 +58,9 @@
                             <label for="tel" class="block mb-2 text-sm font-medium text-gray-900">Telefone</label>
                             <input type="text" name="tel" id="tel" v-model="data.tel"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
-                        </div>
+                                <p class="px-2 mt-2 text-xs text-red-600" v-if="v$.tel.$error">
+                                    {{ "Campo Inválido!" }}</p>
+                            </div>
 
                     </div>
                     <div class="flex items-center space-x-4 mt-1">
@@ -77,12 +79,13 @@
 import { ref, computed } from "vue";
 import axiosInstance from '@/services/api';
 import { useVuelidate } from '@vuelidate/core'
-import { required, minLength } from '@vuelidate/validators'
+import { required, minLength, maxLength } from '@vuelidate/validators'
+import { helpers } from "@vuelidate/validators";
 import { brazilStates } from "@/utils/statesDate";
 import Swal from 'sweetalert2';
 
 import CardComponent from '@/components/CardComponent.vue'
-import { type Unit } from '@/types/user'
+import { type Unit } from '@/types/unit'
 import DefaultLayout from "@/components/DefaultLayout.vue";
 
 const data = ref<Unit>({
@@ -96,11 +99,14 @@ const data = ref<Unit>({
 })
 
 const rules = computed(() => {
+    const onlyAlphas = helpers.regex(/^[a-zA-Z]*$/)
+    const onlyNumbers = helpers.regex(/^[0-9]*$/)
     return {
-        name: { required, minLength: minLength(3) }, // Matches state.firstName
+        name: { required, onlyAlphas, minLength: minLength(3) }, // Matches state.firstName
         address: { required, minLength: minLength(8) },
         city: { required },
         state: { required },
+        tel:{onlyNumbers, maxLength:maxLength(11)}
     }
 })
 

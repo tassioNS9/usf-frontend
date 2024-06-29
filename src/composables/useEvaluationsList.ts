@@ -1,6 +1,6 @@
 import { ref, onMounted } from 'vue'
 import axiosInstance from '@/services/api';
-import { type Evaluation } from '@/types/user'
+import { type Evaluation } from '@/types/evaluations'
 
 export default function useEvaluationsList(unit:number) {
    

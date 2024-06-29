@@ -152,7 +152,7 @@ import { useVuelidate } from '@vuelidate/core'
 import { required, minValue, maxValue } from '@vuelidate/validators'
 import axiosInstance from '@/services/api';
 import { useAuth } from "@/stores/auth";
-import { type Evaluation } from "@/types/user";
+import { type Evaluation } from "@/types/evaluations";
 import Container from '@/components/Container.vue'
 import CardComponent from '@/components/CardComponent.vue'
 import InputSearch from '@/components/InputSearch.vue'
@@ -170,7 +170,7 @@ enum typeIndicator {
     NUMERIC = 'NUMERIC',
 }
 
-const typeIndicatorFiltered = ref(<string>'')
+const typeIndicatorFiltered = ref<string>('')
 const typeIndicatorData = ref<string>('')
 const { isOpenModal } = useModalToggle()
 const dataEvaluation = ref<Evaluation>({
@@ -233,18 +233,13 @@ const createEvaluation = async () => {
     //console.log('first', dataEvaluation.value.date_evaluation)
     dataEvaluation.value.date_evaluation = new Date(dataEvaluation.value.date_evaluation + '-20')
     //console.log(dataEvaluation.value.date_evaluation)
-
-
     const result = await v$.value.$validate()
-    console.log(result)
-    console.log(v$.value)
 
     if (result) {
         Swal.fire({
             title: "Você tem certeza?",
             text: 
-            `Data: ${dataEvaluation.value.date_evaluation.toDateString()}, 
-            Valor: ${dataEvaluation.value.valueNum || (dataEvaluation.value.valueBol ? 'SIM' : 'NÃO') }. 
+            `Valor: ${dataEvaluation.value.valueNum || (dataEvaluation.value.valueBol ? 'SIM' : 'NÃO') }. 
             Você não poderá reverter essa avaliação!`,
             icon: "warning",
             showCancelButton: true,

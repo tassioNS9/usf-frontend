@@ -1,6 +1,6 @@
 import { ref, onMounted } from 'vue'
 import axiosInstance from '@/services/api';
-import { type Unit } from "@/types/user";
+import { type Unit } from "@/types/unit";
 export default function useUnitsList() {
 
     const dataUnits = ref<Unit[]>([])

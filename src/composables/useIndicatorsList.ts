@@ -1,6 +1,6 @@
 import { ref, onMounted } from 'vue'
 import axiosInstance from '@/services/api';
-import { type Indicator } from '@/types/user'
+import { type Indicator } from '@/types/indicators'
 
 export default function useIndicatorsList() {
    
@@ -23,6 +23,7 @@ export default function useIndicatorsList() {
 
     return {
         dataIndicators,
+        getIndicators,
         isload
     }
 
