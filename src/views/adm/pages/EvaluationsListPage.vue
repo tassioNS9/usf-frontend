@@ -11,6 +11,7 @@
             <div class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
                 <select id="unit" v-model="unitSelected"
                     class="w-50 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block p-2.5">
+                    <option selected :value=0>Selecione a Unidade</option>
                     <option v-for="(unit, index) in dataUnits" :value="unit.id">{{ unit.name }}</option>
                 </select>
 
@@ -80,11 +81,11 @@ import { formatData } from '@/utils/formatDate'
 import { formatTypeBol } from '@/utils/formatTypeBol';
 import CardComponent from '@/components/CardComponent.vue'
 import Container from '@/components/Container.vue'
-import useEvaluationsList from '@/composables/useEvaluationsList';
+
 import useUnitsList from '@/composables/useUnitsList';
 import {type Evaluation} from '@/types/evaluations'
 import DefaultLayout from '@/components/DefaultLayout.vue';
-const unitSelected = ref(1)
+const unitSelected = ref(1 ?? 0)
 const yearSelected = ref(2024)
 const isload = ref(true)
 import { useAuth } from '@/stores/auth';
