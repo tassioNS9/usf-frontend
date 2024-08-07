@@ -1,9 +1,8 @@
 <template>
-    <DefaultLayout>
         <Container>
             <CardComponent>
                 <h3 class="text-xl font-bold text-indigo-700">
-                    LISTA DE INDICADORES
+                    LISTA DE OBJETIVOS
                 </h3>
             </CardComponent>
             <Loading v-if="isload" />
@@ -15,42 +14,19 @@
                             <InputSearch v-model="searchDescription" />
                         </form>
                     </div>
-                    <div class="flex">
-                        <div class="flex items-center me-4">
-                            <label for="inline-radio" class="ms-2 text-sm font-medium text-gray-900 ">Filtrar:</label>
-                        </div>
-                        <div class="flex items-center me-4">
-                            <input id="inline-radio" type="radio" value="" name="inline-radio-group"
-                                v-model="typeIndicator"
-                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500   focus:ring-2 ">
-                            <label for="inline-radio" class="ms-2 text-sm font-medium text-gray-900 ">Todos</label>
-                        </div>
-                        <div class="flex items-center me-4">
-                            <input id="inline-radio" type="radio" value="NUMERIC" name="inline-radio-group"
-                                v-model="typeIndicator"
-                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500   focus:ring-2 ">
-                            <label for="inline-radio" class="ms-2 text-sm font-medium text-gray-900 ">NUMÉRICO</label>
-                        </div>
-                        <div class="flex items-center me-4">
-                            <input id="inline-2-radio" type="radio" value="BOOL" name="inline-radio-group"
-                                v-model="typeIndicator"
-                                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500   focus:ring-2 ">
-                            <label for="inline-2-radio" class="ms-2 text-sm font-medium text-gray-900 ">BINÁRIO</label>
-                        </div>
-                    </div>
                 </div>
 
                 <table class="w-full text-sm text-left rtl:text-right text-gray-500 ">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-50 ">
                         <tr>
                             <th scope="col" class="px-6 py-3">
+                                Numeração
+                            </th>
+                            <th scope="col" class="px-6 py-3">
                                 Descrição
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                Tipo Indicador
-                            </th>
-                            <th scope="col" class="px-6 py-3">
-                                Fontes
+                                Diretriz
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 <span class="sr-only">Editar</span>
@@ -58,23 +34,23 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-if="filteredIndicators.length > 0" class="bg-white border-b   hover:bg-gray-50 "
-                            v-for="(indicator, index) in filteredIndicators" :key="indicator.id">
+                        <tr v-if="filteredObjectives.length > 0" class="bg-white border-b   hover:bg-gray-50 "
+                            v-for="(objective, index) in filteredObjectives" :key="objective.id">
                             <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
-                                {{ indicator.description }}
+                                {{ objective.numeration }}
                             </th>
                             <td class="px-6 py-4">
-                                {{ indicator.type_Indicator === 'NUMERIC' ? 'Númerico' : 'Binário' }}
+                                {{ objective.description}}
+                            </td>
+                            <td class="px-6 py-4">
+                                {{ objective.guideline?.numeration }} - {{ objective.guideline?.description }}
                             </td>
 
-                            <td class="px-6 py-4">
-                                {{ indicator.sources }}
-                            </td>
                             <td class="flex gap-2 px-6 py-4 text-right justify-between items-center ">
                                 <p class="font-medium text-blue-600  hover:cursor-pointer hover:underline"
-                                    @click="openEditModal(indicator)">
+                                    @click="openEditModal(objective)">
                                     Editar</p>
-                                <p @click="deleleIndicator(indicator)">
+                                <p @click="deleleObjective(objective)">
                                     <svg class="w-6 h-6 hover:cursor-pointer text-gray-800 dark:text-white"
                                         aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                         fill="none" viewBox="0 0 24 24">
@@ -87,7 +63,7 @@
                         </tr>
 
                         <tr class="flex w-full justify-center border-b  hover:bg-gray-400" v-else>
-                            <td class=" py-6 ">Indicador Não Encontrado!</td>
+                            <td class=" py-6 ">Objetivo Não Encontrado!</td>
                         </tr>
                     </tbody>
                 </table>
@@ -96,38 +72,38 @@
 
         <ModalCardComponent>
             <CardComponent>
-                <Title text="Atualizar Indicador" />
+                <Title text="Atualizar Objetivo" />
             </CardComponent>
-            <form action="#" @submit.prevent="updateIndicator">
+            <form action="#" @submit.prevent="updateObjective">
                 <div class="grid gap-4 mb-4 sm:grid-cols-2 sm:gap-6 sm:mb-5">
                     <div class="sm:col-span-2">
                         <label for="description" class="block mb-2 text-sm font-medium text-gray-900">Descrição</label>
-                        <input type="text" name="description" id="description"
+                        <textarea type="text" name="description" id="description"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                            v-model="editIndicator.description" placeholder="Descrição">
+                            v-model="editObjective.description" placeholder="Descrição"/>
                         <p class="px-2 mt-2 text-xs text-red-600 " v-if="v$.description.$error">
                             {{ "Nome obrigatório!" }}</p>
                     </div>
                     <div class="w-full">
-                        <label for="objective" class="block mb-2 text-sm font-medium text-gray-900">Objetivo Referente</label>
-                        <input type="number" name="objective" id="objective"
+                        <label for="numeration" class="block mb-2 text-sm font-medium text-gray-900">Numeração Objetivo</label>
+                        <input type="number" name="numeration" id="numeration"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                            v-model="editIndicator.id_objective" placeholder="Objetivo" readonly>
-                        <p class="px-2 mt-2 text-xs text-red-600 " v-if="v$.id_objective.$error">
-                            {{ v$.cpf.$errors[0].$params.type === 'required' ? "CPF obrigatório!" : "CPF inválido!" }}
+                            v-model="editObjective.numeration" placeholder="Objetivo" readonly>
+                        <p class="px-2 mt-2 text-xs text-red-600 " v-if="v$.numeration.$error">
+                            {{ "Numeração é obrigatória!" }}
                         </p>
                     </div>
-
-                    <div class="sm:col-span-2">
-                        <label for="sources" class="block mb-2 text-sm font-medium text-gray-900">Fontes</label>
-                        <input type="text" name="sources" id="sources"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-                            v-model="editIndicator.sources" placeholder="Fontes">
-                        <p class="px-2 mt-2 text-xs text-red-600 " v-if="v$.sources.$error">
-                            {{ "Cargo obrigatório!" }}</p>
+                    <div class="w-full">
+                        <label for="guideline" class="block mb-2 text-sm font-medium text-gray-900 ">Diretriz
+                            referente</label>
+                        <select id="guideline" v-model="guidelineSelected"
+                            class=" w-full truncate w-50 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block p-2.5">
+                            <option selected :value=0>Selecione a Diretriz</option>
+                            <option v-for="(guideline, index) in dataGuidelines" :value="guideline.id">{{ guideline.numeration}}</option>
+                        </select>
+             
                     </div>
                 </div>
-
 
                 <div class="flex items-center space-x-4">
                     <button type="submit"
@@ -141,78 +117,74 @@
                 </div>
             </form>
         </ModalCardComponent>
-    </DefaultLayout>
 </template>
 
 <script setup lang="ts">
 import axiosInstance from '@/services/api'
-import { ref, onUpdated, onMounted, reactive, computed } from 'vue'
+import { ref, computed } from 'vue'
 import useVuelidate from "@vuelidate/core";
 import Swal from 'sweetalert2';
 import { required, minLength, email } from "@vuelidate/validators";
 import Loading from '@/components/Loading.vue';
-import { type Indicator } from '@/types/indicators'
 import InputSearch from '@/components/InputSearch.vue';
 import CardComponent from '@/components/CardComponent.vue'
 import ModalCardComponent from '@/components/ModalCardComponent.vue'
 import Container from '@/components/Container.vue'
 import Title from '@/components/Title.vue'
-import useIndicatorsList from '@/composables/useIndicatorsList';
 import useModalToggle from '@/composables/useModalToggle'
 import DefaultLayout from '@/components/DefaultLayout.vue';
 import closeModal from "@/composables/cancelModal";
+import useGuidelinesList from '@/composables/useGuidelinesList';
+import {type  Objective } from '@/types/objective';
+import useObjectivesList from '@/composables/useObjectivesList';
 
-const editIndicator = ref<Indicator>({
+
+
+const editObjective = ref<Objective>({
     id: 0,
+    numeration:0,
     description: '',
-    id_objective: 0,
-    type_Indicator: '',
-    sources: '',
+    id_guideline:0,
+
 })
+
+const guidelineSelected = ref(0)
 const searchDescription = ref('')
 const { isOpenModal } = useModalToggle()
-const typeIndicator = ref('')
 const rules = computed(() => {
     return {
         description: { required },
-        id_objective: { required },
-        type_Indicator: { required },
-        sources: { required }
+        numeration:{required}
     }
 })
 
-const v$ = useVuelidate(rules, editIndicator)
+const v$ = useVuelidate(rules, editObjective)
 
 
-const filteredIndicators = computed(() => {
-    let indicators = dataIndicators.value
-
+const filteredObjectives = computed(() => {
+    let objectives = dataObjectives.value
+    console.log(dataObjectives.value)
 
     if (searchDescription.value !== '') {
-        indicators = indicators.filter(item => item.description.toLowerCase().includes(searchDescription.value.toLowerCase()))
+        objectives = objectives.filter(item => item.description.toLowerCase().includes(searchDescription.value.toLowerCase()))
     }
 
-    if (typeIndicator.value !== '') {
-        indicators = indicators.filter(user => user.type_Indicator === typeIndicator.value)
-    }
-    return indicators;
+    return objectives
 })
 
 const openEditModal = (data: any) => {
     isOpenModal.value = true
-    editIndicator.value = data
+    editObjective.value = data
 }
 
 
-const updateIndicator = async () => {
+const updateObjective = async () => {
     const result = await v$.value.$validate()
     if (result) {
-        await axiosInstance.put(`/api/indicators/${editIndicator.value.id}`,
+        await axiosInstance.put(`/api/objectives/${editObjective.value.id}`,
             {
-                description: editIndicator.value.description,
-                id_objective: editIndicator.value.id_objective,
-                type_indicator: editIndicator.value.type_Indicator,
-                sources: editIndicator.value.sources
+                description: editObjective.value.description,
+                numeration: editObjective.value.numeration,
 
             }, {
             headers: { 'Content-Type': 'application/json' },
@@ -220,13 +192,13 @@ const updateIndicator = async () => {
         }).then(res => {
             Swal.fire({
                 title: "OK!",
-                text: "Indicador editado com sucesso!",
+                text: "Diretriz editado com sucesso!",
                 icon: "success",
                 confirmButtonText: "Ok",
             });
         }).catch(err => {
             Swal.fire({
-                title: 'Erro ao atualizar Indicador!',
+                title: 'Erro ao atualizar Diretriz!',
                 text: 'Algum erro inesperado aconteceu!',
                 icon: 'error',
                 confirmButtonText: 'Ok',
@@ -235,7 +207,7 @@ const updateIndicator = async () => {
         })
     } else {
         Swal.fire({
-            title: 'Erro ao atualizar Indicador!',
+            title: 'Erro ao atualizar Diretriz!',
             text: 'Por favor verifique os campos!',
             icon: 'error',
             confirmButtonText: 'Ok',
@@ -244,11 +216,11 @@ const updateIndicator = async () => {
 
 }
 
-const deleleIndicator = async (data: any) => {
+const deleleObjective = async (data: any) => {
 
     Swal.fire({
         title: "Você tem certeza?",
-        text: "Você perderá todas informações relacionadas a este Indicador!",
+        text: "Você perderá todas informações relacionadas a  este Objetivo!",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
@@ -256,14 +228,14 @@ const deleleIndicator = async (data: any) => {
         confirmButtonText: "SIM, Deletar!"
     }).then((result) => {
         if (result.isConfirmed) {
-            axiosInstance.delete(`/api/indicators/${data.id}`)
+            axiosInstance.delete(`/api/objectives/${data.id}`)
                 .then(response => {
                     Swal.fire({
                         title: "Deleted!",
                         text: "Your file has been deleted.",
                         icon: "success"
                     });
-                    dataIndicators.value = dataIndicators.value.filter(item=> item.id !== data.id)
+                    dataObjectives.value = dataObjectives.value.filter(item=> item.id !== data.id)
                 })
                 .catch(error => {
                     Swal.fire({
@@ -285,8 +257,8 @@ const deleleIndicator = async (data: any) => {
 
 
 
-const { dataIndicators, isload } = useIndicatorsList()
-
+const { dataObjectives, isload } = useObjectivesList()
+const { dataGuidelines } = useGuidelinesList()
 
 </script>
 

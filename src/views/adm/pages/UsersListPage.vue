@@ -4,7 +4,7 @@
     <Container>
       <CardComponent>
         <h3 class="text-xl font-bold text-indigo-700 ">
-          Lista de Usuários
+          LISTA DE USUÁRIOS
         </h3>
       </CardComponent>
       <Loading v-if="isload" />
@@ -36,9 +36,20 @@
                 class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
               <label for="inline-2-radio" class="ms-2 text-sm font-medium text-gray-900">ADM</label>
             </div>
+            <div class="flex items-center me-4">
+              <input id="inline-2-radio" type="radio" :value="Role.DIRECTOR" name="inline-radio-group"
+                v-model="typeUserSelected"
+                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
+              <label for="inline-2-radio" class="ms-2 text-sm font-medium text-gray-900">Diretor</label>
+            </div>
+            <div class="flex items-center me-4">
+              <input id="inline-2-radio" type="radio" :value="Role.MANAGER" name="inline-radio-group"
+                v-model="typeUserSelected"
+                class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500">
+              <label for="inline-2-radio" class="ms-2 text-sm font-medium text-gray-900">Gestor</label>
+            </div>
           </div>
           <div class="flex items-center">
-
             <select id="unit" v-model="unitSelected"
               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5">
               <option :value="0">Todas Unidades</option>
@@ -80,17 +91,17 @@
               <td class="px-6 py-4">
                 {{ user?.cpf }}
               </td>
-              <td class="px-6 py-4">
-                {{ user.unit === null ? "--------------" : user.unit?.name }}
+              <td  class="px-6 py-4">
+                {{ user.unit !== null ? user.unit?.name : "SEM UNIDADE REFERENTE" }}
               </td>
               <td class="px-6 py-4">
-                {{ user.role === 'USER' ? 'Usuário' : 'Administrador' }}
+                {{ user.role  }}
               </td>
 
               <td class="px-6 py-4">
                 {{ user.office }}
               </td>
-              <td class="flex gap-2 px-6 py-4 text-right justify-between items-center ">
+              <td class="flex gap-2 px-6 py-4  justify-between items-center ">
                 <p class="font-medium text-blue-600  hover:cursor-pointer hover:underline" @click="openEditModal(user)">
                   Editar</p>
                 <p @click="deleteUser(user)">
@@ -207,10 +218,16 @@ import { helpers } from '@vuelidate/validators';
 import DefaultLayout from '@/components/DefaultLayout.vue';
 import Swal from 'sweetalert2';
 import closeModal from "@/composables/cancelModal";
+
 enum Role {
   USER = 'USER',
-  ADMIN = 'ADMIN'
+  ADMIN = 'ADMIN',
+  MANAGER = 'MANAGER',
+  DIRECTOR = 'DIRECTOR'
 }
+
+const arrayRole = Object.values(Role)
+console.log(arrayRole)
 
 const searchName = ref('')
 const unitSelected = ref(0)
@@ -259,7 +276,7 @@ const openEditModal = (data: any) => {
 
 
 const rules = computed(() => {
-  const onlyAlphas = helpers.regex(/^[a-zA-Z]*$/)
+  const onlyAlphas = helpers.regex( /^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/)
   const onlyNumbers = helpers.regex(/^[0-9]*$/)
   return {
     name: { required, onlyAlphas },
@@ -330,8 +347,8 @@ Swal.fire({
         axiosInstance.delete(`/api/users/${data.id}`)
             .then(response => {
                 Swal.fire({
-                    title: "Deletado!",
-                    text: "Your file has been deleted.",
+                    title: "OK!",
+                    text: "Usuário Deletado.",
                     icon: "success"
                 });
                 dataUsers.value = dataUsers.value.filter(item=> item.id !== data.id)

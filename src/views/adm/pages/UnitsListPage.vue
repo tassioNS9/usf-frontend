@@ -3,7 +3,7 @@
         <div class="mt-1 mx-auto rounded-3xl  p-4">
             <CardComponent>
                 <h3 class="text-xl font-bold text-indigo-700">
-                    Lista de Unidades
+                   LISTA DE UNIDADES
                 </h3>
             </CardComponent>
 
@@ -182,7 +182,7 @@ const editUnit = ref<Unit>({
 const searchUnit = ref('')
 const { isOpenModal } = useModalToggle()
 const rules = computed(() => {
-    const onlyAlphas = helpers.regex(/^[a-zA-Z]*$/)
+    const onlyAlphas = helpers.regex( /^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/)
     const onlyNumbers = helpers.regex(/^[0-9]*$/)
     return {
         name: { required, onlyAlphas },

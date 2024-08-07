@@ -30,6 +30,7 @@
       <div class="flex flex-col">
       <h2 class="px-4 text-gray-600">Bem vindo, {{auth.userAuthetincated.name}}</h2>
       <p v-if="auth.userAuthetincated.role === 'USER'" class="px-4 text-xs text-blue-800">Unidade Referente: {{ auth.userAuthetincated.unit.name }} </p>
+      <p v-if="auth.userAuthetincated.role === 'MANAGER'" class="px-4 text-xs text-blue-800">Gestor Municipal</p>
     </div>
       <button class="flex mx-4 text-gray-400 focus:outline-none">
         <svg

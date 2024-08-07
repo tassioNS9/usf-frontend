@@ -25,7 +25,9 @@ export interface UserRegister {
 
 export enum Role {
     USER = 'USER',
-    ADMIN = 'ADMIN'
+    ADMIN = 'ADMIN',
+    MANAGER = 'MANAGER',
+    DIRECTOR = 'DIRECTOR'
 }
 
 export enum TypeIndicators {

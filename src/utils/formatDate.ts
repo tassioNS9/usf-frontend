@@ -7,3 +7,9 @@ export  const  formatData  =(date : string)=>{
     return  (`${newDate.getMonth()+1}/${newDate.getFullYear()}`)
 
 }
+
+export const getFullYearDate = (date: Date)=>{
+    const getString = date.toString()
+
+   return parseInt(getString.split('T')[0].split('-')[0])
+}

@@ -5,7 +5,7 @@
             <section>
                 <div class="py-8 px-4 mx-auto max-w-2xl lg:py-1">
                     <CardComponent>
-                        <h2 class=" text-xl font-bold text-indigo-700">Cadastrar novo usuário</h2>
+                        <h2 class=" text-xl font-bold text-indigo-700">CADASTRAR NOVO USUÁRIO</h2>
                     </CardComponent>
                     <form action="post" @submit.prevent="createUser">
                         <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">
@@ -47,6 +47,22 @@
                                     </div>
                                     <div class="flex items-center me-4">
                                         <input id="inline-2-radio" type="radio" name="inline-radio-group"
+                                            :value="Role.MANAGER" v-model="data.role"
+                                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500   focus:ring-2 ">
+                                        <label for="inline-2-radio"
+                                            class="ms-2 text-sm font-medium text-gray-900 ">Gestor</label>
+                                    </div>
+
+                                    <div class="flex items-center me-4">
+                                        <input id="inline-2-radio" type="radio" name="inline-radio-group"
+                                            :value="Role.DIRECTOR" v-model="data.role"
+                                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500   focus:ring-2 ">
+                                        <label for="inline-2-radio"
+                                            class="ms-2 text-sm font-medium text-gray-900 ">Diretor(a) de Unidade</label>
+                                    </div>
+
+                                    <div class="flex items-center me-4">
+                                        <input id="inline-2-radio" type="radio" name="inline-radio-group"
                                             :value="Role.ADMIN" v-model="data.role"
                                             class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500   focus:ring-2 ">
                                         <label for="inline-2-radio"
@@ -56,7 +72,7 @@
                             </div>
 
 
-                            <div v-if="data.role === 'USER'" class="sm:col-span-2">
+                            <div v-if="data.role === 'USER' || data.role === 'DIRECTOR'" class="sm:col-span-2">
                                 <label for="unit" class="block mb-2 text-sm font-medium text-gray-900">*Unidade
                                     de
                                     Saúde</label>
@@ -118,9 +134,12 @@ import { type UserRegister } from "@/types/user";
 import CardComponent from '@/components/CardComponent.vue'
 import DefaultLayout from "@/components/DefaultLayout.vue";
 import useUnitsList from "@/composables/useUnitsList";
+
 enum Role {
+    USER = 'USER',
     ADMIN = 'ADMIN',
-    USER = 'USER'
+    MANAGER = 'MANAGER',
+    DIRECTOR = 'DIRECTOR'
 }
 
 const data = ref<UserRegister>({
@@ -134,9 +153,9 @@ const data = ref<UserRegister>({
 })
 
 const rules = computed(() => {
-    const onlyAlphas = helpers.regex(/^[a-zA-Z]*$/)
+    const onlyAlphas = helpers.regex( /^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ ]+$/)
     const onlyNumbers = helpers.regex(/^[0-9]*$/)
-    if (data.value.role === Role.USER) {
+    if (data.value.role === Role.USER  || data.value.role === Role.DIRECTOR) {
            return {
             name: { required,  onlyAlphas,  minLength: minLength(3) }, // Matches state.firstName
             cpf: { required, onlyNumbers, minLength: minLength(11), maxLength: maxLength(11) }, // Matches state.lastName
@@ -161,7 +180,7 @@ const rules = computed(() => {
 })
 
 watch(data.value, async (newQuestion, oldQuestion) => {
-    if(data.value.role === Role.ADMIN){
+    if(data.value.role === Role.ADMIN || data.value.role === Role.MANAGER){
         data.value.id_unit = null
     }
 })

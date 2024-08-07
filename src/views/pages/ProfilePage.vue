@@ -5,7 +5,7 @@
                 <section class="bg-slate-300  rounded-3xl  p-8 text-cyan-600">
                     <div class="max-w-3xl mx-auto px-4 py-8  lg:py-1">
                         <CardComponent>
-                            <h2 class=" text-xl font-bold text-indigo-700 ">Meu Perfil</h2>
+                            <h2 class=" text-xl font-bold text-indigo-700 ">MEU PERFIL</h2>
                         </CardComponent>
                         <Loading v-if="load" />
                         <form action="#" v-else-if="!load">

@@ -3,7 +3,7 @@
         <section class="bg-slate-300  rounded-3xl  p-8 text-cyan-600">
             <div class="max-w-3xl mx-auto px-4 py-8  lg:py-1">
                 <CardComponent>
-                    <h2 class=" text-xl font-bold text-indigo-700">Cadastrar nova Unidade</h2>
+                    <h2 class=" text-xl font-bold text-indigo-700">CADASTRAR NOVA UNIDADE</h2>
                 </CardComponent>
                 <form action="post" @submit.prevent="createUnit">
                     <div class="grid gap-4 sm:grid-cols-2 sm:gap-6">

@@ -3,6 +3,8 @@
     <div id="chart">
       <apexchart type="bar" width="380" height="350" :options="dataChart.chartOptions" :series="dataChart.series">
       </apexchart>
+
+      <h3 class="w-[400px] text-center font-bold text-sm text-[#4338ca]">{{ props.descriptionData }}</h3>
   </div>
 
 </template>
@@ -31,7 +33,7 @@ const dataChart = ref({
 
   series: [{
     name: 'Valor do Mês',
-    data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    data: [null, null, null, null, null, null, null, null, null, null, null, null]
   }],
   chartOptions: {
     chart: {
@@ -108,19 +110,7 @@ const dataChart = ref({
       }
 
     },
-    title: {
-      text: `${props.descriptionData || ""}`,
-      floating: true,
-      offsetY: 330,
-      align: 'center',
-      style: {
-        fontSize:  '15px',
-        fontWeight:  'bold',
-        fontFamily:  'Roboto',
-        color: '#4338ca',
-        margin: 15,
-      }
-    }
+
   },
 
 })
@@ -140,7 +130,7 @@ const getMonthofDate = (date: Date) => {
 
 const resetChart = ()=>{
   dataChart.value.series[0].data.map((item, index) => {
-      dataChart.value.series[0].data[index] = 0
+      dataChart.value.series[0].data[index] = null
     })
 }
 

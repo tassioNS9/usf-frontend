@@ -1,3 +1,4 @@
+
 import type { RouteRecordRaw } from 'vue-router'
 import { createRouter, createWebHistory } from 'vue-router'
 import routesIn from "./routes";
@@ -19,6 +20,7 @@ const MainRoutes = {
       },  
   ]
 };
+
 
 
 const routes: RouteRecordRaw[] = [
@@ -59,13 +61,31 @@ const routes: RouteRecordRaw[] = [
     },
     component: () => import("@/views/pages/ProfilePage.vue"),
   },
+
+  
   {
     path: "/app/avaliacoes",
     name: "Avaliacoes",
     meta: {
-      requiresAuth:true
+      requiresAuth:true, requiresUserOrDirector:true
     },
     component: () => import("@/views/pages/EvaluationRegisterPage.vue"),
+  },
+  {
+    path: "/app/diretrizes-objetivos",
+    name: "Metas",
+    meta: {
+      requiresAuth:true, requiresAdmin:true
+    },
+    component: () => import("@/views/adm/pages/TargetsRegisterPage.vue"),
+  },
+  {
+    path: "/app/lista-diretrizes-objetivos",
+    name: "ListaMetas",
+    meta: {
+      requiresAuth:true, requiresAdmin:true
+    },
+    component: () => import("@/views/adm/pages/TargetsListPage.vue"),
   },
   {
     path: "/app/indicadores",
@@ -104,9 +124,17 @@ const routes: RouteRecordRaw[] = [
     path: "/app/lista-avaliacoes",
     name: "ListaAvaliacoes",
     meta:{
-      requiresAuth:true,  requiresAdmin:true
+      requiresAuth:true, requiresNotAdmin:true
     },
     component: () => import("@/views/adm/pages/EvaluationsListPage.vue"),
+  },
+  {
+    path: "/app/lista-avaliacoes/:token/:id",
+    name: "AvaliacoesIndicador",
+    meta:{
+      requiresAuth:true,  requiresNotAdmin:true
+    },
+    component: () => import("@/views/adm/pages/EvaluationsByIndicatorPage.vue"),
   },
   {
     path: '/:pathMatch(.*)*',

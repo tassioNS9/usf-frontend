@@ -3,7 +3,7 @@
         <Container>
             <CardComponent>
                 <h3 class="text-xl font-bold text-indigo-700">
-                    Lista de Indicadores
+                    LISTA DE INDICADORES
                 </h3>
             </CardComponent>
             <div class="relative overflow-x-auto shadow-md bg-white sm:rounded-lg">
@@ -51,9 +51,6 @@
                                 Tipo Indicador
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                Dimensão
-                            </th>
-                            <th scope="col" class="px-6 py-3">
                                 Fontes
                             </th>
                             <th scope="col" class="px-6 py-3">
@@ -68,13 +65,10 @@
                                 {{ indicator.description }}
                             </th>
                             <td class="px-6 py-4">
-                                {{ indicator.objective }}
+                                {{ indicator.id_objective }}
                             </td>
                             <td class="px-6 py-4">
                                 {{ indicator.type_Indicator === 'NUMERIC' ? 'Númerico' : 'Binário' }}
-                            </td>
-                            <td class="px-6 py-4">
-                                {{ indicator.dimension }}
                             </td>
                             <td class="px-6 py-4">
                                 {{ indicator.sources }}
@@ -191,7 +185,7 @@ const filteredIndicators = computed(() => {
         indicators = indicators.filter(item => item.description.includes(descriptionSearch.value))
     }
 
-    if (typeIndicatorFiltered .value !== '') {
+    if (typeIndicatorFiltered.value !== '') {
         indicators = indicators.filter(user => user.type_Indicator === typeIndicatorFiltered.value)
     }
     return indicators;
@@ -238,15 +232,14 @@ const createEvaluation = async () => {
     if (result) {
         Swal.fire({
             title: "Você tem certeza?",
-            text: 
-            `Valor: ${dataEvaluation.value.valueNum || (dataEvaluation.value.valueBol ? 'SIM' : 'NÃO') }. 
-            Você não poderá reverter essa avaliação!`,
+            text:
+                `Valor: ${dataEvaluation.value.valueNum || (dataEvaluation.value.valueBol ? 'SIM' : 'NÃO')}.`,
             icon: "warning",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
             confirmButtonText: "SIM, CONFIRMAR!",
-            cancelButtonText:'CANCELAR'
+            cancelButtonText: 'CANCELAR'
         }).then(async (result) => {
             if (result.isConfirmed) {
                 await axiosInstance.post('/api/evaluations',
@@ -278,14 +271,9 @@ const createEvaluation = async () => {
                     console.log(err)
                 })
                 closeModal()
-                dataEvaluation.value.valueNum = null
-                dataEvaluation.value.valueBol = null
-                dataEvaluation.value.date_evaluation = '' as any
-            }else{
+
+            } else {
                 closeModal()
-                dataEvaluation.value.valueNum = null
-                dataEvaluation.value.valueBol = null
-                dataEvaluation.value.date_evaluation = '' as any
             }
         });
 
@@ -299,6 +287,10 @@ const createEvaluation = async () => {
     }
 
 }
+
+dataEvaluation.value.valueNum = null
+dataEvaluation.value.valueBol = null
+dataEvaluation.value.date_evaluation = '' as any
 
 
 const { dataIndicators, isload } = useIndicatorsList()

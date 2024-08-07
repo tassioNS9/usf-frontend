@@ -5,7 +5,7 @@
       <div class="flex flex-col">
         <CardComponent>
           <h3 class=" text-xl font-bold text-indigo-700 ">
-            Dashboard
+           DASHBOARD
           </h3>
         </CardComponent>
         <Loading v-if="isload" />
@@ -21,7 +21,7 @@
             </select>
           </div>
 
-          <div v-if="auth.role === 'ADMIN'" class="w-full md:w-1/3 flex flex-col  gap-2">
+          <div class="w-full md:w-1/3 flex flex-col  gap-2">
             <label for="units" class=" w-2/3 px-2 text-gray-900">Selecionar Unidade
             </label>
             <select id="units" v-model="unitSelected"
@@ -35,10 +35,16 @@
         </div>
       </div>
       <div v-if="!isload" class="flex flex-wrap items-center justify-center  mx-3 my-6 gap-5">
-        <template v-for="indicator in dataIndicators" :key="indicator.id">
-          <CreateChart :yearSelected="yearSelected" :evaluations="indicator.evaluations"
+        <template v-for="indicator in dataIndicatorsNumerics" :key="indicator.id">
+          <ChartNumeric :yearSelected="yearSelected" :evaluations="indicator.evaluations"
             :description-data="indicator.description" />
         </template>
+
+        <template v-for="indicator in dataIndicatorsBooleans" :key="indicator.id">
+          <ChartBol :yearSelected="yearSelected" :evaluations="indicator.evaluations"
+          :description-data="indicator.description"/>
+        </template>
+
       </div>
     </Container>
   </DefaultLayout>
@@ -46,7 +52,8 @@
 
 
 <script setup lang="ts">
-import CreateChart from '@/components/CreateChart.vue';
+import ChartNumeric from '@/components/ChartNumeric.vue';
+import ChartBol from '@/components/ChartBool.vue'
 import { ref, onMounted, watch } from 'vue'
 import { useAuth } from "@/stores/auth";
 import axiosInstance from '@/services/api'
@@ -57,8 +64,9 @@ import useUnitsList from '@/composables/useUnitsList';
 import DefaultLayout from '@/components/DefaultLayout.vue';
 import {type IndicatorList} from '@/types/indicators'
 
-const dataIndicators = ref<IndicatorList[]>([])
-  const auth = useAuth()
+const dataIndicatorsNumerics = ref<IndicatorList[]>([])
+const dataIndicatorsBooleans = ref<IndicatorList[]>([])
+const auth = useAuth()
 const yearSelected = ref(2024)
 const unitSelected = ref(auth.userAuthetincated.id_unit ??  1)
 
@@ -77,11 +85,17 @@ watch(unitSelected, (newQuestion, oldQuestion) => {
 const getFilteredEvaluations = async () => {
 
   await axiosInstance.get(`/api/indicators-numerics/${unitSelected.value}/${yearSelected.value}`).then(response => {
-    (dataIndicators.value = response.data.data)
-    //descriptionIndicator.value = response?.data?.data[0]?.indicator.description
+    (dataIndicatorsNumerics.value = response.data.data)
   }).catch(error => {
     console.log(error)
   })
+
+  await axiosInstance.get(`/api/indicators-booleans/${unitSelected.value}/${yearSelected.value}`).then(response => {
+    (dataIndicatorsBooleans.value = response.data.data)
+  }).catch(error => {
+    console.log(error)
+  })
+  
 }
 
 

@@ -1,8 +1,7 @@
 <template>
-
   <section class="bg-[url('@/assets/background-main.jpg')]  ">
     <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0 h-screen">
-      <div class="flex bg-indigo-700 w-full absolute top-0 h-20 items-center justify-end">
+      <div class="flex bg-indigo-700 w-full absolute top-0 h-12 items-center justify-end">
         <a href="/app/dashboard" :class="auth.isAuth ? 'block' : 'hidden'"
           class="flex w-[105px] mr-10 items-center justify-center px-4 h-10 text-base font-medium text-gray-500 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-gray-700">
           Voltar 
@@ -45,7 +44,14 @@
         </div>
       </div>
     </div>
+
+    <div class="w-full absolute bottom-0">
+      <Footer/>
+    </div>
+
   </section>
+
+
 </template>
 
 
@@ -55,6 +61,7 @@ import api from '@/services/api';
 import { reactive, ref } from 'vue';
 import { useAuth } from '@/stores/auth';
 import { useRouter } from "vue-router";
+import Footer from '@/components/Footer.vue';
 const auth = useAuth();
 const router = useRouter()
 const user = reactive({
